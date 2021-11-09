@@ -16,9 +16,16 @@ for user in users:
 
 
 def books_generator(books_path):
+    fieldnames = ['title', 'author', 'genre', 'pages']
     with open(books_path, newline='') as books_file:
-        reader = DictReader(books_file)
+        reader = DictReader(books_file, fieldnames=fieldnames)
+        # skip row with titles
+        next(reader)
         for row in reader:
+            # remove redundant field 'None'
+            row.pop(None)
+            # convert Pages into int type
+            row.update({"pages": int(row.get("pages"))})
             yield row
 
 
