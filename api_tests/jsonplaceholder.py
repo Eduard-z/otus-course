@@ -15,7 +15,7 @@ def test_get_all_albums():
 
 @pytest.mark.parametrize("album_id", [1, 33, 100])
 def test_get_album_by_id(album_id):
-    target = base_url + "/albums/{}".format(album_id)
+    target = base_url + f"/albums/{album_id}"
     res = requests.get(url=target)
     assert res.status_code == 200
     assert res.json().get("id") == album_id
@@ -48,7 +48,9 @@ def test_filtering_comments_by_post_id_wrong_value(post_id):
 @pytest.mark.parametrize("user_id", [1, 10])
 def test_create_post(input_title, output_title, post_body, user_id):
     target = base_url + "/posts"
-    res = requests.post(url=target, data={'title': input_title, 'body': post_body, 'userId': user_id})
+    res = requests.post(url=target,
+                        data={'title': input_title, 'body': post_body, 'userId': user_id}
+                        )
     res_json = res.json()
     assert res.status_code == 201
     assert res_json.get("title") == output_title
@@ -69,7 +71,8 @@ def test_create_post(input_title, output_title, post_body, user_id):
 def test_update_post(input_title, output_title, post_body, user_id, post_id):
     target = base_url + f"/posts/{post_id}"
     res = requests.put(url=target,
-                       data={'title': input_title, 'body': post_body, 'userId': user_id, 'id': post_id}
+                       data={'title': input_title, 'body': post_body,
+                             'userId': user_id, 'id': post_id}
                        )
     res_json = res.json()
     assert res.status_code == 200
@@ -96,8 +99,8 @@ def test_patch_post(input_title, output_title, user_id, post_id):
     assert res_json.get("userId") == user_id
 
 
-@pytest.mark.parametrize("user_id, post_id", [(1, 1), (4, 33)])
-def test_delete_post_by_id(user_id, post_id):
+@pytest.mark.parametrize("post_id", [1, 33, 99])
+def test_delete_post_by_id(post_id):
     target = base_url + f"/posts/{post_id}"
     res = requests.delete(url=target)
     assert res.status_code == 200

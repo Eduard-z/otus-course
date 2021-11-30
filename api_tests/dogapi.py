@@ -47,7 +47,7 @@ def test_get_random_dog_image_from_a_breed(breed):
 
 @pytest.mark.parametrize("breed, sub_breed", get_list_of_breeds_and_sub_breeds())
 def test_get_array_of_images_from_a_sub_breed(breed, sub_breed):
-    target = base_url + "/breed/{}/{}/images".format(breed, sub_breed)
+    target = base_url + f"/breed/{breed}/{sub_breed}/images"
     response = requests.get(url=target)
     res_json = response.json()
     assert response.status_code == 200
@@ -58,7 +58,7 @@ def test_get_array_of_images_from_a_sub_breed(breed, sub_breed):
 
 @pytest.mark.parametrize("breed, sub_breed", get_list_of_breeds_and_sub_breeds())
 def test_get_random_dog_image_from_a_sub_breed(breed, sub_breed):
-    target = base_url + "/breed/{}/{}/images/random".format(breed, sub_breed)
+    target = base_url + f"/breed/{breed}/{sub_breed}/images/random"
     response = requests.get(url=target)
     res_json = response.json()
     assert response.status_code == 200
