@@ -1,5 +1,4 @@
 import pytest
-import requests
 
 
 def pytest_addoption(parser):
@@ -23,8 +22,3 @@ def base_url_yandex(request):
 @pytest.fixture
 def response_code(request):
     return request.config.getoption("--status_code")
-
-
-def test_response_code(base_url_yandex, response_code):
-    response = requests.get(url=base_url_yandex)
-    assert response.status_code == int(response_code)

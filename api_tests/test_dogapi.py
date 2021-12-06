@@ -1,6 +1,6 @@
 import requests
 import pytest
-from api_tests.dog_breeds_data import all_breeds_list, get_list_of_breeds_and_sub_breeds
+from api_tests.test_dog_breeds_data import all_breeds_list, get_list_of_breeds_and_sub_breeds
 
 base_url = "https://dog.ceo/api"
 
