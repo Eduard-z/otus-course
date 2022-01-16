@@ -1,17 +1,11 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from .page_objects.RegistrationPage import RegistrationPage
 
 
-def test_product_page(browser):
-    browser.get(url=browser.url + "/index.php?route=account/register")
-    wait = WebDriverWait(driver=browser, timeout=2)
-    # wait until text is displayed in page title
-    wait.until(EC.title_is("Register Account"))
+def test_registration_page(browser):
+    RegistrationPage(browser=browser).open_registration_page()
 
-    browser.find_element(By.CSS_SELECTOR, "aside > div.list-group")
-    browser.find_element(By.CSS_SELECTOR, "fieldset#account")
-    browser.find_element(By.CSS_SELECTOR, "[name='firstname']")
-    browser.find_element(By.LINK_TEXT, "Privacy Policy")
-    browser.find_element(By.CSS_SELECTOR, "[value='1'][name='newsletter']")
-    browser.find_element(By.CSS_SELECTOR, "[value='Continue']")
+    RegistrationPage(browser=browser).wait_until_page_title_is_displayed("Register Account")
+    RegistrationPage(browser=browser).find_action_items_column()
+    RegistrationPage(browser=browser).find_personal_details_fieldset()
+    RegistrationPage(browser=browser).find_privacy_policy_link()
+    RegistrationPage(browser=browser).find_newsletter_radio_yes()

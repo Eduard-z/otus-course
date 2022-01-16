@@ -1,16 +1,13 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from .page_objects.MainPage import MainPage
 
 
 def test_main_page(browser):
-    browser.get(url=browser.url)
-    wait = WebDriverWait(driver=browser, timeout=2)
-    # wait until navigation bar is displayed
-    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".navbar-collapse")))
+    main_page = MainPage(browser=browser)
+    main_page.open_main_page()
 
-    browser.find_element(By.CSS_SELECTOR, "a[title='My Account'] span.hidden-xs")
-    browser.find_element(By.NAME, "search")
-    browser.find_element(By.CSS_SELECTOR, ".btn-inverse")
-    browser.find_element(By.LINK_TEXT, "Your Store")
-    browser.find_element(By.CSS_SELECTOR, ".product-layout")
+    main_page.find_navigation_bar()
+    main_page.find_my_account_dropdown()
+    main_page.find_search_field()
+    main_page.find_cart_button()
+    main_page.find_your_store_link()
+    main_page.find_product_item_card()

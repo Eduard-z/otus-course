@@ -1,16 +1,12 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from .page_objects.CataloguePage import CataloguePage
 
 
-def test_product_page(browser):
-    browser.get(url=browser.url + "/index.php?route=product/category&path=20")
-    wait = WebDriverWait(driver=browser, timeout=2)
-    # wait until catalogue is displayed
-    wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".product-grid img")))
+def test_catalogue_page(browser):
+    catalogue_page = CataloguePage(browser=browser)
+    catalogue_page.open_catalogue_page()
 
-    browser.find_element(By.CSS_SELECTOR, ".list-group .active")
-    browser.find_element(By.XPATH, "//label[text()='Sort By:']")
-    browser.find_element(By.XPATH, "//button//span[text()='Add to Cart']")
-    browser.find_element(By.XPATH, "//div/div[contains(text(), 'Showing')]")
-    browser.find_element(By.XPATH, "//button/span[text()= 'Currency']/ancestor::button")
+    catalogue_page.find_catalogue_item_card()
+    catalogue_page.find_products_group_menu_active()
+    catalogue_page.find_filter_sortby_label()
+    catalogue_page.find_add_to_cart_product_button()
+    catalogue_page.find_number_of_products_and_pages()

@@ -1,19 +1,13 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from .page_objects.ProductPage import ProductPage
 
 
 def test_product_page(browser):
-    browser.get(url=browser.url + "/index.php?route=product/product&product_id=43")
-    wait = WebDriverWait(driver=browser, timeout=2)
-    # wait until button is displayed
-    wait.until(EC.presence_of_all_elements_located(
-        (By.CSS_SELECTOR, "input[name='product_id'] ~ button")
-    ))
+    product_page = ProductPage(browser=browser)
+    product_page.open_product_page()
 
-    browser.find_element(By.CSS_SELECTOR, ".breadcrumb a")
-    browser.find_element(By.CSS_SELECTOR, ".image-additional")
-    browser.find_element(By.CSS_SELECTOR, ".active > a")
-    browser.find_element(By.CSS_SELECTOR,
-                         ".btn-group > button[data-original-title='Add to Wish List']")
-    browser.find_element(By.CSS_SELECTOR, "[name='quantity']")
+    product_page.find_add_to_cart_button()
+    product_page.find_breadcrumb_item()
+    product_page.find_product_image_additional()
+    product_page.find_product_info_active_tab()
+    product_page.find_add_to_wishlist_button()
+    product_page.find_qty_field()
