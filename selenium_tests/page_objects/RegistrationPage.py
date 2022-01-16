@@ -37,14 +37,14 @@ class RegistrationPage(BasePage):
     def find_personal_details_fieldset(self):
         self._verify_element_presence(self.PERSONAL_DETAILS_FIELDSET)
 
-    def populate_registration_fieldset(self, first_name, last_name, email_address,
-                                       telephone, password, confirm_password):
-        self._input_field_value(self.FIRST_NAME_FIELD, first_name)
-        self._input_field_value(self.LAST_NAME_FIELD, last_name)
-        self._input_field_value(self.EMAIL_FIELD, email_address)
-        self._input_field_value(self.TELEPHONE_FIELD, telephone)
-        self._input_field_value(self.PASSWORD_FIELD, password)
-        self._input_field_value(self.PASSWORD_CONFIRM_FIELD, confirm_password)
+    def populate_registration_fieldset(self, user_registration_dataset):
+        self._input_field_value(self.FIRST_NAME_FIELD, user_registration_dataset["first_name"])
+        self._input_field_value(self.LAST_NAME_FIELD, user_registration_dataset["last_name"])
+        self._input_field_value(self.EMAIL_FIELD, user_registration_dataset["email_address"])
+        self._input_field_value(self.TELEPHONE_FIELD, user_registration_dataset["telephone"])
+        self._input_field_value(self.PASSWORD_FIELD, user_registration_dataset["password"])
+        self._input_field_value(
+            self.PASSWORD_CONFIRM_FIELD, user_registration_dataset["confirm_pass"])
 
     def tick_privacy_policy_checkbox(self):
         self.browser.find_element(*self.PRIVACY_POLICY_CHECKBOX).click()
