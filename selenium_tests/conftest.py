@@ -39,7 +39,7 @@ def browser(request):
     log_file.setFormatter(format_logs)
     logger.addHandler(log_file)
 
-    logger.info(f"===> Test '{test_name}' started at {datetime.datetime.now()}")
+    logger.info("===> Test '%s' started at %s", test_name, datetime.datetime.now())
 
     if environment == "local":
         if browser == "chrome":
@@ -58,32 +58,28 @@ def browser(request):
             raise Exception("Driver not supported")
 
     elif environment == "selenoid":
-        executor_url = f"http://{executor}/wd/hub"
-
         if browser == "chrome":
             options = webdriver.ChromeOptions()
-            options.browser_version = browser_version
         elif browser == "firefox":
             options = webdriver.FirefoxOptions()
-            options.browser_version = browser_version
         elif browser == "MicrosoftEdge":
             options = webdriver.EdgeOptions()
-            options.browser_version = browser_version
         else:
             raise Exception("Browser not supported")
 
-        driver = webdriver.Remote(command_executor=executor_url, options=options)
+        options.browser_version = browser_version
+        driver = webdriver.Remote(command_executor=f"http://{executor}/wd/hub", options=options)
 
     else:
         raise Exception("Environment not supported")
 
-    logger.info(f"Browser: {browser, driver.capabilities}")
+    logger.info("Browser: %s-:- %s", browser, driver.capabilities)
 
     driver.maximize_window()
 
     def fin():
         driver.quit()
-        logger.info(f"===> Test '{test_name}' finished at {datetime.datetime.now()}")
+        logger.info("===> Test '%s' finished at %s", test_name, datetime.datetime.now())
 
     request.addfinalizer(fin)
 

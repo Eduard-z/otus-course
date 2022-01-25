@@ -28,7 +28,7 @@ class BasePage:
 
     def _verify_element_presence(self, locator: tuple):
         with allure.step(f'Verify element "{locator}" is present'):
-            self.logger.info(f'Verify element "{locator}" is present')
+            self.logger.info('Verify element "%s" is present', locator)
 
             try:
                 return WebDriverWait(driver=self.browser, timeout=2) \
@@ -44,7 +44,7 @@ class BasePage:
 
     def _verify_text_in_element(self, locator: tuple, element_text):
         with allure.step(f'Verify text "{element_text}" is present in element "{locator}"'):
-            self.logger.info(f'Verify text "{element_text}" in element "{locator}"')
+            self.logger.info('Verify text "%s" in element "%s"', element_text, locator)
 
             try:
                 WebDriverWait(driver=self.browser, timeout=3) \
@@ -61,7 +61,7 @@ class BasePage:
 
     def _input_field_value(self, field_locator: tuple, field_value):
         with allure.step(f'Input value "{field_value}" into field "{field_locator}"'):
-            self.logger.info(f'Input value "{field_value}" into field "{field_locator}"')
+            self.logger.info('Input value "%s" into field "%s"', field_value, field_locator)
             input_field = self._verify_element_presence(field_locator)
             input_field.click()
             input_field.clear()
@@ -69,7 +69,7 @@ class BasePage:
 
     def _select_dropdown_item(self, locator: tuple):
         with allure.step(f'Select "{locator}" item from dropdown'):
-            self.logger.info(f'Select "{locator}" item from dropdown')
+            self.logger.info('Select "%s" item from dropdown', locator)
             dropdown_element = self._verify_element_presence(locator)
             ActionChains(self.browser).pause(0.3) \
                 .move_to_element(dropdown_element).click().perform()

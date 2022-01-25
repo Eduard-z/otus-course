@@ -10,7 +10,7 @@ from selenium_tests.page_objects.UserAccountCreatedPage import UserAccountCreate
 @allure.title("Register new user")
 @pytest.mark.parametrize("user_registration_data",
                          [{"first_name": "first name test1", "last_name": "last name test1",
-                           "email_address": "email@test19.ru", "telephone": "1111111",
+                           "email_address": "email@test23.ru", "telephone": "1111111",
                            "password": "password_test1", "confirm_pass": "password_test1"}
                           ])
 def test_register_new_user(browser, user_registration_data):
