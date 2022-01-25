@@ -1,6 +1,12 @@
+import allure
+
+from allure_commons.types import Severity
 from .page_objects.MainPage import MainPage
 
 
+@allure.story("Elements validation")
+@allure.title("Find elements on Main page")
+@allure.severity(severity_level=Severity.MINOR)
 def test_main_page(browser):
     main_page = MainPage(browser=browser)
     main_page.open_main_page()

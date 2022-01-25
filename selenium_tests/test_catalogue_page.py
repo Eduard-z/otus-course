@@ -1,6 +1,12 @@
+import allure
+
+from allure_commons.types import Severity
 from .page_objects.CataloguePage import CataloguePage
 
 
+@allure.story("Elements validation")
+@allure.title("Find elements on Catalogue page")
+@allure.severity(severity_level=Severity.MINOR)
 def test_catalogue_page(browser):
     catalogue_page = CataloguePage(browser=browser)
     catalogue_page.open_catalogue_page()
