@@ -40,7 +40,7 @@ def parse_logs(file):
                 log_analysis["Request Counter"][method.group(1)] += 1
 
                 if duration is not None:
-                    dict_ip4 = dict()
+                    dict_ip4 = {}
 
                     dict_ip4["method"] = method.group(1)
                     if referer is not None:
@@ -58,7 +58,8 @@ def parse_logs(file):
     # 3 most durable requests
     log_analysis["Request Counter"]["top3 long requests"] = sort_long_request[:3]
 
-    with open(f"{file.name.rsplit('/')[-1]}--result.json", "w") as result_file:
+    with open(f"{file.name.rsplit('/')[-1]}--result.json",
+              mode="w", encoding='UTF-8') as result_file:
         create_json_method2 = json.dumps(log_analysis, indent=4)
         result_file.write(create_json_method2)
 
@@ -68,9 +69,9 @@ def parse_logs(file):
 
 if args.log_dir is not None:
     for log in os.listdir(args.log_dir):
-        with open(os.path.join(args.log_dir, log), "r") as log_file:
+        with open(os.path.join(args.log_dir, log), mode="r", encoding='UTF-8') as log_file:
             parse_logs(log_file)
 
 if args.log_file is not None:
-    with open(args.log_file) as log_file:
+    with open(args.log_file, mode="r", encoding='UTF-8') as log_file:
         parse_logs(log_file)
