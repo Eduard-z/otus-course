@@ -28,6 +28,8 @@ def parse_logs(file):
         # "Mozilla/5.0 (Windows NT 6.0; rv:34.0) Gecko/20100101 Firefox/34.0" 2254
         ip_match = re.search(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}", line)
         if ip_match is not None:
+            log_analysis["Request Counter"]["all_requests"] += 1
+
             ip = ip_match.group()
             method = re.search(r"\] \"(POST|GET|PUT|DELETE|HEAD|CONNECT|OPTIONS|TRACE|PATCH)",
                                line)
@@ -36,7 +38,6 @@ def parse_logs(file):
             duration = re.search(r"\d+$", line)
             if method is not None:
                 ip_addresses.append(ip)
-                log_analysis["Request Counter"]["all_requests"] += 1
                 log_analysis["Request Counter"][method.group(1)] += 1
 
                 if duration is not None:
