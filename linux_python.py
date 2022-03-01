@@ -5,7 +5,7 @@ import time
 from subprocess import run, PIPE
 from collections import defaultdict
 
-run_command = run(["ps", "aux"], stdout=PIPE)
+run_command = run(["ps", "aux"], stdout=PIPE, check=True)
 capture_stdout = run_command.stdout
 decode_stdout = capture_stdout.decode('utf-8')
 line_by_line = decode_stdout.splitlines()
