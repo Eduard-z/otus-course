@@ -13,7 +13,7 @@ def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="chrome")
     parser.addoption("--url", action="store", default="https://demo.opencart.com/")
     parser.addoption("--environment", action="store", default="local")
-    parser.addoption("--executor", action="store", default="192.168.100.144:4444")
+    parser.addoption("--executor", action="store", default="192.168.100.11:4444")
     parser.addoption("--browser_version", action="store", default="96.0")
     parser.addoption("--drivers", action="store",
                      default=os.path.expanduser("~/Documents/git repos/drivers"))
