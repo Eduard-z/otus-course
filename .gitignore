@@ -110,6 +110,7 @@ celerybeat.pid
 env/
 venv/
 virt-env/
+otus-env/
 ENV/
 env.bak/
 venv.bak/
