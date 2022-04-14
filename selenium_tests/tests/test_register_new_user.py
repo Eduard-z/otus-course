@@ -5,6 +5,7 @@ from selenium_tests.page_objects.RegistrationPage import RegistrationPage
 from selenium_tests.page_objects.UserAccountCreatedPage import UserAccountCreatedPage
 
 
+@pytest.mark.skip(reason="existing email_address")
 @allure.feature("Register new user")
 @allure.story("Create new user account")
 @allure.title("Register new user")
