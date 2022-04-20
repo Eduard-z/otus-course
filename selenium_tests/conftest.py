@@ -22,7 +22,7 @@ def pytest_addoption(parser):
 
 @pytest.fixture(scope="module")
 def browser(request):
-    browser = request.config.getoption("--browser")
+    _browser = request.config.getoption("--browser")
     url = request.config.getoption("--url")
     environment = request.config.getoption("--environment")
     executor = request.config.getoption("--executor")
@@ -32,6 +32,9 @@ def browser(request):
 
     logger = logging.getLogger('driver')
     test_name = request.node.name
+    test_name2 = request.module.__name__
+    print("\n" + test_name)  # test_catalogue_page.py
+    print("\n" + test_name2)  # selenium_tests.test_catalogue_page
     logger.setLevel(level=log_level)
 
     log_file = logging.FileHandler(f"selenium_tests/logs/{test_name}.log", mode="a")
@@ -42,27 +45,27 @@ def browser(request):
     logger.info("===> Test '%s' started at %s", test_name, datetime.datetime.now())
 
     if environment == "local":
-        if browser == "chrome":
+        if _browser == "chrome":
             service = Service_chrome(executable_path=drivers + "/chromedriver")
             driver = webdriver.Chrome(service=service)
-        elif browser == "firefox":
+        elif _browser == "firefox":
             service = Service_firefox(executable_path=drivers + "/geckodriver")
             driver = webdriver.Firefox(service=service)
-        elif browser == "edge":
+        elif _browser == "edge":
             service = Service_edge(executable_path=drivers + "/msedgedriver")
             driver = webdriver.Edge(service=service)
-        elif browser == "yandex":
+        elif _browser == "yandex":
             service = Service_chrome(executable_path=drivers + "/yandexdriver")
             driver = webdriver.Chrome(service=service)
         else:
             raise Exception("Driver not supported")
 
     elif environment == "selenoid":
-        if browser == "chrome":
+        if _browser == "chrome":
             options = webdriver.ChromeOptions()
-        elif browser == "firefox":
+        elif _browser == "firefox":
             options = webdriver.FirefoxOptions()
-        elif browser == "MicrosoftEdge":
+        elif _browser == "MicrosoftEdge":
             options = webdriver.EdgeOptions()
         else:
             raise Exception("Browser not supported")
@@ -73,7 +76,7 @@ def browser(request):
     else:
         raise Exception("Environment not supported")
 
-    logger.info("Browser: %s-:- %s", browser, driver.capabilities)
+    logger.info("Browser: %s-:- %s", _browser, driver.capabilities)
 
     driver.maximize_window()
 
