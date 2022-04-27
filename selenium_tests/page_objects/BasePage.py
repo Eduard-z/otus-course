@@ -73,3 +73,44 @@ class BasePage:
             dropdown_element = self._verify_element_presence(locator)
             ActionChains(self.browser).pause(0.3) \
                 .move_to_element(dropdown_element).click().perform()
+
+    def _click_facebook_like_widget(self, locator: tuple):
+        with allure.step(f'Click "{locator}" facebook Like widget'):
+            self.logger.info('Click "%s" facebook Like widget', locator)
+            dropdown_element = self._verify_element_presence(locator)
+            ActionChains(self.browser).pause(0.3) \
+                .move_to_element(dropdown_element).pause(1).click_and_hold().pause(1).release().perform()
+
+    def _switch_out_of_iframe(self):
+        with allure.step('Switch out of iframe to default context'):
+            self.logger.info('Switch out of iframe to default context')
+            self.browser.switch_to.default_content()
+
+    def _verify_page_title(self, page_title):
+        with allure.step(f'Verify Page Title text is "{page_title}"'):
+            self.logger.info('Verify Page Title text is "%s"', page_title)
+            assert self.browser.title == page_title
+
+    def _get_browser_current_windows(self):
+        main_window = self.browser.current_window_handle
+        current_browser_tabs = self.browser.window_handles
+        return current_browser_tabs
+
+    def _switch_to_another_browser_tab(self, browser_window_handle):
+        self.browser.switch_to.window(browser_window_handle)
+
+    def _verify_new_window_is_open(self, old_windows):
+        with allure.step('Verify new browser tab is opened'):
+            self.logger.info('Verify new browser tab is opened')
+            try:
+                WebDriverWait(driver=self.browser, timeout=2)\
+                    .until(EC.new_window_is_opened(old_windows))
+                return list(set(self.browser.window_handles).difference(set(old_windows)))[0]
+            except TimeoutException:
+                self.logger.exception("Exception occurred")
+                allure.attach(
+                    body=self.browser.get_screenshot_as_png(),
+                    name="screenshot_browser_tab_not_found",
+                    attachment_type=allure.attachment_type.PNG
+                )
+                raise AssertionError("Can't find browser tab")

@@ -17,3 +17,8 @@ def test_product_page(browser):
     product_page.find_product_info_active_tab()
     product_page.find_add_to_wishlist_button()
     product_page.find_qty_field()
+
+    product_page.click_facebook_like("Facebook")
+    product_page.switch_out_of_iframe()
+    product_page.switch_to_main_browser_tab()
+    product_page.click_twitter_tweet("Твиттер")
