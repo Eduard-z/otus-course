@@ -4,7 +4,7 @@ from .BasePage import BasePage
 
 class MainPage(BasePage):
     NAVIGATION_BAR = (By.CSS_SELECTOR, ".navbar-collapse")
-    MY_ACCOUNT_DROPDOWN = (By.CSS_SELECTOR, "a[title='My Account'] span.hidden-xs")
+    MY_ACCOUNT_DROPDOWN = (By.CSS_SELECTOR, "a[title='My Account']")
     SEARCH_FIELD = (By.NAME, "search")
     CART_BUTTON = (By.CSS_SELECTOR, ".btn-inverse")
     YOUR_STORE_LINK = (By.CSS_SELECTOR, "[id='logo'] > a")
@@ -21,8 +21,12 @@ class MainPage(BasePage):
     def find_navigation_bar(self):
         self._verify_element_presence(self.NAVIGATION_BAR)
 
-    def find_my_account_dropdown(self):
-        self._verify_element_presence(self.MY_ACCOUNT_DROPDOWN)
+    def expand_my_account_dropdown(self):
+        self._verify_element_presence(self.MY_ACCOUNT_DROPDOWN).click()
+
+    def click_register_account(self):
+        self._verify_element_presence(self.MY_ACCOUNT_DROPDOWN) \
+            .find_element(By.XPATH, "//following-sibling::ul//a[text()='Register']").click()
 
     def find_search_field(self):
         self._verify_element_presence(self.SEARCH_FIELD)
