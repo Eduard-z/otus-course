@@ -2,6 +2,7 @@ import random
 import requests
 import pytest
 from jsonschema import validate
+from cerberus import Validator
 
 base_url = "https://jsonplaceholder.typicode.com"
 
@@ -122,3 +123,20 @@ def test_api_json_schema_post_by_id(post_id):
               }
 
     validate(instance=res.json(), schema=schema)
+
+
+@pytest.mark.parametrize("post_id", [1, 33])
+def test_api_cerberus_schema_post_by_id(post_id):
+    target = base_url + f"/posts/{post_id}"
+    res = requests.get(url=target)
+
+    schema = {
+        "id": {"type": "number", "required": True},
+        "userId": {"type": "number"},
+        "title": {"type": "string"},
+        "body": {"type": "string"},
+        "test": {"type": "string", "required": False}
+    }
+
+    v = Validator()
+    assert v.validate(res.json(), schema=schema)
