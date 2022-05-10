@@ -1,7 +1,7 @@
 import json
 from csv import DictReader
 
-with open("/home/ed/Desktop/users.json", "r") as users_file:
+with open("users_testdata.json", "r") as users_file:
     users = json.loads(users_file.read())
 
 lst_result = []
@@ -29,7 +29,7 @@ def books_generator(books_path):
             yield row
 
 
-bk = books_generator("/home/ed/Desktop/books-39204-271043.csv")
+bk = books_generator("books_testdata.csv")
 
 try:
     while True:
@@ -39,6 +39,6 @@ try:
 except StopIteration:
     pass
 
-with open("/home/ed/Desktop/result.json", "w") as result_file:
+with open("result_data.json", "w") as result_file:
     create_json = json.dumps(lst_result, indent=4)
     result_file.write(create_json)

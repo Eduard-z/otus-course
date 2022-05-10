@@ -110,6 +110,7 @@ celerybeat.pid
 env/
 venv/
 virt-env/
+otus-env/
 ENV/
 env.bak/
 venv.bak/
@@ -131,3 +132,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# allure
+allure-report/
+allure-results/
