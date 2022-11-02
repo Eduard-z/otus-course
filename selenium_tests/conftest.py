@@ -31,10 +31,8 @@ def browser(request):
     log_level = request.config.getoption("--log_level")
 
     logger = logging.getLogger('driver')
-    test_name = request.node.name
-    test_name2 = request.module.__name__
-    print("\n" + test_name)  # test_catalogue_page.py
-    print("\n" + test_name2)  # selenium_tests.test_catalogue_page
+    test_name = request.node.name  # test_catalogue_page.py
+    test_name2 = request.module.__name__  # selenium_tests.test_catalogue_page
     logger.setLevel(level=log_level)
 
     log_file = logging.FileHandler(f"selenium_tests/logs/{test_name}.log", mode="a")
