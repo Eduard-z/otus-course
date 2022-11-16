@@ -17,7 +17,7 @@ class BasePage:
         self.logger = logging.getLogger(type(self).__name__)
 
         self.log_file = logging.FileHandler(
-            f"selenium_tests/logs/{self.browser.test_name}.log", mode="a")
+            f"selenium_tests/logs/{self.browser.test_name}.log", mode="a", encoding="utf-8")
         self.format_logs = logging.Formatter(
             "%(asctime)s.%(msecs)d %(levelname)s %(name)s: %(filename)s:%(lineno)d '%(message)s'",
             datefmt="%d-%b-%Y %H:%M:%S")
@@ -42,7 +42,7 @@ class BasePage:
                 )
                 raise AssertionError(f"Can't find element by locator: {locator}")
 
-    def _verify_text_in_element(self, locator: tuple, element_text):
+    def _verify_text_in_element(self, locator: tuple, element_text: str):
         with allure.step(f'Verify text "{element_text}" is present in element "{locator}"'):
             self.logger.info('Verify text "%s" in element "%s"', element_text, locator)
 
