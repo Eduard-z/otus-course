@@ -101,10 +101,15 @@ class BasePage:
             self.logger.info('Switch out of iframe to default context')
             self.browser.switch_to.default_content()
 
-    def _verify_page_title(self, page_title):
+    def _verify_page_title(self, page_title: str):
         with allure.step(f'Verify Page Title text is "{page_title}"'):
             self.logger.info('Verify Page Title text is "%s"', page_title)
-            assert self.browser.title == page_title
+            actual_title = self.browser.title
+            try:
+                assert actual_title == page_title
+            except AssertionError:
+                self.logger.exception("Exception occurred: Wrong page title '%s'", actual_title)
+                raise AssertionError(f"Wrong page title {actual_title}")
 
     def _get_browser_current_windows(self):
         main_window = self.browser.current_window_handle
