@@ -34,7 +34,7 @@ class BasePage:
                 return WebDriverWait(driver=self.browser, timeout=2) \
                     .until(EC.presence_of_element_located(locator))
             except TimeoutException:
-                self.logger.exception("Exception occurred")
+                self.logger.exception("Exception occurred: Element '%s' not found", locator)
                 allure.attach(
                     body=self.browser.get_screenshot_as_png(),
                     name="screenshot_element_not_found",
@@ -50,7 +50,7 @@ class BasePage:
                 WebDriverWait(driver=self.browser, timeout=3) \
                     .until(EC.text_to_be_present_in_element(locator, element_text))
             except TimeoutException:
-                self.logger.exception("Exception occurred")
+                self.logger.exception("Exception occurred: Element '%s' does not contain '%s'", locator, element_text)
                 allure.attach(
                     body=self.browser.get_screenshot_as_png(),
                     name="screenshot_text_not_match",
@@ -59,7 +59,7 @@ class BasePage:
                 raise AssertionError(f"Expected text to be '{element_text}' "
                                      f"but it is '{self.browser.find_element(*locator).text}'")
 
-    def _input_field_value(self, field_locator: tuple, field_value):
+    def _input_field_value(self, field_locator: tuple, field_value: str):
         with allure.step(f'Input value "{field_value}" into field "{field_locator}"'):
             self.logger.info('Input value "%s" into field "%s"', field_value, field_locator)
             input_field = self._verify_element_presence(field_locator)
@@ -73,6 +73,21 @@ class BasePage:
             dropdown_element = self._verify_element_presence(locator)
             ActionChains(self.browser).pause(0.3) \
                 .move_to_element(dropdown_element).click().perform()
+
+    def _click(self, locator: tuple):
+        with allure.step(f'Click element "{locator}"'):
+            self.logger.info('Click element "%s"', locator)
+
+        try:
+            WebDriverWait(driver=self.browser, timeout=1).until(EC.element_to_be_clickable(locator)).click()
+        except TimeoutException:
+            self.logger.exception("Exception occurred: Element '%s' not found", locator)
+            allure.attach(
+                body=self.browser.get_screenshot_as_png(),
+                name="screenshot_element_not_found",
+                attachment_type=allure.attachment_type.PNG
+            )
+            raise AssertionError(f"Can't find element by locator: {locator}")
 
     def _click_facebook_like_widget(self, locator: tuple):
         with allure.step(f'Click "{locator}" facebook Like widget'):

@@ -18,14 +18,14 @@ class LoginPage(BasePage):
     def wait_until_login_form_is_displayed(self):
         self._verify_element_presence(self.LOGIN_FORM)
 
-    def input_username(self, admin_name):
+    def input_username(self, admin_name: str):
         self._input_field_value(self.USERNAME_FIELD, admin_name)
 
-    def input_password(self, admin_password):
+    def input_password(self, admin_password: str):
         self._input_field_value(self.PASSWORD_FIELD, admin_password)
 
     def click_login_button(self):
-        self.browser.find_element(*self.LOGIN_BUTTON).click()
+        self._click(self.LOGIN_BUTTON)
 
     def find_forgotten_password_link(self):
         self._verify_element_presence(self.FORGOTTEN_PASSWORD_LINK)
