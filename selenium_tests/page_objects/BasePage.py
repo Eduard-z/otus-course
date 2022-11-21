@@ -4,7 +4,7 @@ import allure
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 
 class BasePage:
@@ -88,6 +88,22 @@ class BasePage:
                 attachment_type=allure.attachment_type.PNG
             )
             raise AssertionError(f"Can't find element by locator: {locator}")
+
+    def _click_child_element(self, locator: tuple, relative_locator: tuple):
+        with allure.step(f'Click element "{relative_locator}"'):
+            self.logger.info('Click element "%s"', relative_locator)
+
+        try:
+            main_element = self._verify_element_presence(locator)
+            main_element.find_element(*relative_locator).click()
+        except NoSuchElementException:
+            self.logger.exception("Exception occurred: Element '%s' not found", relative_locator)
+            allure.attach(
+                body=self.browser.get_screenshot_as_png(),
+                name="screenshot_element_not_found",
+                attachment_type=allure.attachment_type.PNG
+            )
+            raise AssertionError(f"Can't find element by locator: {relative_locator}")
 
     def _click_facebook_like_widget(self, locator: tuple):
         with allure.step(f'Click "{locator}" facebook Like widget'):
