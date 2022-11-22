@@ -20,7 +20,7 @@ def test_add_1_product_to_catalog(browser, test_product_name, description, meta_
         admin_page = AdminPage(browser=browser)
         admin_page.check_admin_page_title()
         admin_page.wait_until_menu_is_displayed()
-        admin_page.open_products_list()
+        admin_page.open_products_list(menu_sub_item_name="Products")
 
         catalog_products_page = CatalogProductsPage(browser=browser)
         catalog_products_page.check_products_page_title()
@@ -33,7 +33,7 @@ def test_add_1_product_to_catalog(browser, test_product_name, description, meta_
         add_product_page.input_description(description)
         add_product_page.input_meta_tag_title(meta_tag)
 
-        add_product_page.switch_to_another_tab("Data")
+        add_product_page.switch_to_another_tab(tab_name="Data")
         add_product_page.input_model(model)
 
     with allure.step(f"Verify product {test_product_name} created"):
