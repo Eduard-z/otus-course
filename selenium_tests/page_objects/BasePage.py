@@ -5,6 +5,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.webdriver.remote.webelement import WebElement
 
 
 class BasePage:
@@ -74,28 +75,33 @@ class BasePage:
             ActionChains(self.browser).pause(0.3) \
                 .move_to_element(dropdown_element).click().perform()
 
-    def _click(self, locator: tuple):
-        with allure.step(f'Click element "{locator}"'):
-            self.logger.info('Click element "%s"', locator)
+    def _click(self, element: tuple | WebElement):
+        """element is either a locator (text) or an WebElement"""
+        with allure.step(f'Click element "{element}"'):
+            self.logger.info('Click element "%s"', element)
 
         try:
-            WebDriverWait(driver=self.browser, timeout=1).until(EC.element_to_be_clickable(locator)).click()
+            WebDriverWait(driver=self.browser, timeout=1).until(EC.element_to_be_clickable(element)).click()
         except TimeoutException:
-            self.logger.exception("Exception occurred: Element '%s' not found", locator)
+            self.logger.exception("Exception occurred: Element '%s' not found", element)
             allure.attach(
                 body=self.browser.get_screenshot_as_png(),
                 name="screenshot_element_not_found",
                 attachment_type=allure.attachment_type.PNG
             )
-            raise AssertionError(f"Can't find element by locator: {locator}")
+            raise AssertionError(f"Can't find element by locator: {element}")
 
-    def _click_child_element(self, locator: tuple, relative_locator: tuple):
+    def _click_child_element(self, element: tuple | WebElement, relative_locator: tuple):
+        """element is either a locator (text) or an WebElement"""
         with allure.step(f'Click element "{relative_locator}"'):
             self.logger.info('Click element "%s"', relative_locator)
 
         try:
-            main_element = self._verify_element_presence(locator)
-            main_element.find_element(*relative_locator).click()
+            main_element = element
+            if isinstance(element, tuple):
+                main_element = self._verify_element_presence(element)
+            child_element = main_element.find_element(*relative_locator)
+            self._click(child_element)
         except NoSuchElementException:
             self.logger.exception("Exception occurred: Element '%s' not found", relative_locator)
             allure.attach(
