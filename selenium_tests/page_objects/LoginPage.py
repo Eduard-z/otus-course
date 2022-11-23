@@ -11,9 +11,13 @@ class LoginPage(BasePage):
     LINK_TO_OPENCART_SITE = (By.XPATH, "//*[text()='OpenCart']")
 
     path = "/admin"
+    page_title = "Administration"
 
     def open_login_page(self):
         self.browser.get(url=self.browser.url + self.path)
+
+    def check_login_page_title(self, title=page_title):
+        self._verify_page_title(title)
 
     def wait_until_login_form_is_displayed(self):
         self._verify_element_presence(self.LOGIN_FORM)
@@ -27,8 +31,8 @@ class LoginPage(BasePage):
     def click_login_button(self):
         self._click(self.LOGIN_BUTTON)
 
-    def find_forgotten_password_link(self):
-        self._verify_element_presence(self.FORGOTTEN_PASSWORD_LINK)
+    def click_forgotten_password_link(self):
+        self._click(self.FORGOTTEN_PASSWORD_LINK)
 
-    def find_link_to_opencart_site(self):
-        self._verify_element_presence(self.LINK_TO_OPENCART_SITE)
+    def click_link_to_opencart_site(self):
+        self._click(self.LINK_TO_OPENCART_SITE)
