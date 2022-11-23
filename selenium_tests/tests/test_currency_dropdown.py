@@ -12,6 +12,7 @@ def test_currency_dropdown(browser, currency):
     with allure.step("Open Main page"):
         main_page = MainPage(browser=browser)
         main_page.open_main_page()
+        main_page.check_main_page_title()
 
     with allure.step(f"Select {currency} currency"):
         main_page \
