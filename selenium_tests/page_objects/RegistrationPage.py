@@ -1,13 +1,10 @@
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from .BasePage import BasePage
-from selenium.common.exceptions import TimeoutException
 
 
 class RegistrationPage(BasePage):
     ACTION_ITEMS_COLUMN = (By.CSS_SELECTOR, "aside > div.list-group")
-    PERSONAL_DETAILS_FIELDSET = (By.CSS_SELECTOR, "fieldset#account")
+    REGISTRATION_FORM = (By.CSS_SELECTOR, "#content form[action]")
     FIRST_NAME_FIELD = (By.CSS_SELECTOR, "input[name='firstname']")
     LAST_NAME_FIELD = (By.CSS_SELECTOR, "input[name='lastname']")
     EMAIL_FIELD = (By.CSS_SELECTOR, "input[name='email']")
@@ -21,23 +18,21 @@ class RegistrationPage(BasePage):
     CONTINUE_BUTTON = (By.CSS_SELECTOR, "[value='Continue']")
 
     path = "/index.php?route=account/register"
+    page_title = "Register Account"
 
     def open_registration_page(self):
         self.browser.get(url=self.browser.url + self.path)
 
-    def wait_until_page_title_is_displayed(self, title):
-        try:
-            WebDriverWait(driver=self.browser, timeout=1).until(EC.title_is(title))
-        except TimeoutException:
-            raise AssertionError(f"Expected title = '{title}' but it is '{self.browser.title}'")
+    def check_registration_page_title(self, title=page_title):
+        self._verify_page_title(title)
+
+    def wait_until_registration_form_is_displayed(self):
+        self._verify_element_presence(self.REGISTRATION_FORM)
 
     def find_action_items_column(self):
         self._verify_element_presence(self.ACTION_ITEMS_COLUMN)
 
-    def find_personal_details_fieldset(self):
-        self._verify_element_presence(self.PERSONAL_DETAILS_FIELDSET)
-
-    def populate_registration_fieldset(self, user_registration_dataset):
+    def populate_registration_fieldset(self, user_registration_dataset: dict):
         self._input_field_value(self.FIRST_NAME_FIELD, user_registration_dataset["first_name"])
         self._input_field_value(self.LAST_NAME_FIELD, user_registration_dataset["last_name"])
         self._input_field_value(self.EMAIL_FIELD, user_registration_dataset["email_address"])
@@ -47,13 +42,13 @@ class RegistrationPage(BasePage):
             self.PASSWORD_CONFIRM_FIELD, user_registration_dataset["confirm_pass"])
 
     def tick_privacy_policy_checkbox(self):
-        self.browser.find_element(*self.PRIVACY_POLICY_CHECKBOX).click()
+        self._click(self.PRIVACY_POLICY_CHECKBOX)
 
-    def find_privacy_policy_link(self):
-        self._verify_element_presence(self.PRIVACY_POLICY_LINK)
+    def click_privacy_policy_link(self):
+        self._click(self.PRIVACY_POLICY_LINK)
 
-    def find_newsletter_radio_yes(self):
-        self._verify_element_presence(self.NEWSLETTER_RADIO_YES)
+    def select_newsletter_radio_yes(self):
+        self._click(self.NEWSLETTER_RADIO_YES)
 
     def click_continue_button(self):
-        self.browser.find_element(*self.CONTINUE_BUTTON).click()
+        self._click(self.CONTINUE_BUTTON)

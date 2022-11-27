@@ -6,6 +6,8 @@ from .BasePage import BasePage
 class MainPage(BasePage):
     NAVIGATION_BAR_ITEMS = (By.XPATH, "//ul[contains(@class, 'navbar-nav')]/li/a")
     MY_ACCOUNT_DROPDOWN = (By.CSS_SELECTOR, "a[title='My Account']")
+    REGISTER_USER_LINK_REL = (By.XPATH, "//following-sibling::ul//a[text()='Register']")
+    LOGIN_AS_USER_LINK_REL = (By.XPATH, "//following-sibling::ul//a[text()='Login']")
     SEARCH_FIELD = (By.NAME, "search")
     SEARCH_BUTTON = (By.CSS_SELECTOR, "#search button")
     CART_BUTTON = (By.CSS_SELECTOR, ".btn-inverse")
@@ -59,8 +61,10 @@ class MainPage(BasePage):
         self._click(self.MY_ACCOUNT_DROPDOWN)
 
     def click_register_account(self):
-        self._verify_element_presence(self.MY_ACCOUNT_DROPDOWN) \
-            .find_element(By.XPATH, "//following-sibling::ul//a[text()='Register']").click()
+        self._click_child_element(self.MY_ACCOUNT_DROPDOWN, self.REGISTER_USER_LINK_REL)
+
+    def click_login_into_user_account(self):
+        self._click_child_element(self.MY_ACCOUNT_DROPDOWN, self.LOGIN_AS_USER_LINK_REL)
 
     def input_text_into_search_field(self, search_text: str):
         self._input_field_value(self.SEARCH_FIELD, search_text)
@@ -68,11 +72,11 @@ class MainPage(BasePage):
     def click_search_button(self):
         self._click(self.SEARCH_BUTTON)
 
-    def find_cart_button(self):
-        self._verify_element_presence(self.CART_BUTTON)
+    def click_cart_button(self):
+        self._click(self.CART_BUTTON)
 
-    def find_your_store_link(self):
-        self._verify_element_presence(self.YOUR_STORE_LINK)
+    def click_your_store_link(self):
+        self._click(self.YOUR_STORE_LINK)
 
     def expand_currency_dropdown(self):
         self._click(self.CURRENCY_DROPDOWN)
