@@ -131,7 +131,7 @@ class BasePage:
                 assert actual_title == page_title
             except AssertionError:
                 self.logger.exception("Exception occurred: Wrong page title '%s'", actual_title)
-                raise AssertionError(f"Wrong page title {actual_title}")
+                raise AssertionError(f"Wrong page title '{actual_title}'")
 
     def _get_browser_current_windows(self):
         main_window = self.browser.current_window_handle

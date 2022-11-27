@@ -18,3 +18,11 @@ class ProductCardElement(BasePage):
     @property
     def all_product_names(self) -> list:
         return [i.text for i in self.all_product_names_elements]
+
+    def compare_card_names_to_search_text(self, search_text: str) -> bool:
+        search_keywords = search_text.lower().split()
+        for name in (i.lower() for i in self.all_product_names):
+            for word in search_keywords:
+                if word not in name:
+                    return False
+            return True
