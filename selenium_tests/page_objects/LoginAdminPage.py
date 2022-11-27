@@ -2,8 +2,8 @@ from selenium.webdriver.common.by import By
 from .BasePage import BasePage
 
 
-class LoginPage(BasePage):
-    LOGIN_FORM = (By.CLASS_NAME, "panel-default")
+class LoginAdminPage(BasePage):
+    LOGIN_FORM = (By.TAG_NAME, "form")
     USERNAME_FIELD = (By.ID, "input-username")
     PASSWORD_FIELD = (By.NAME, "password")
     LOGIN_BUTTON = (By.CSS_SELECTOR, "button[type='submit']")
