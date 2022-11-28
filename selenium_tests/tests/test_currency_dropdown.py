@@ -2,6 +2,7 @@ import pytest
 import allure
 
 from selenium_tests.page_objects.MainPage import MainPage
+from selenium_tests.page_objects.page_elements.OpencartHeaderElement import OpencartHeaderElement
 
 
 @allure.feature("Currency Dropdown")
@@ -15,6 +16,6 @@ def test_currency_dropdown(browser, currency):
         main_page.check_main_page_title()
 
     with allure.step(f"Select {currency} currency"):
-        main_page \
+        OpencartHeaderElement(browser=browser) \
             .expand_currency_dropdown() \
             .select_currency(currency)

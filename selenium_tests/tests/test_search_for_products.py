@@ -5,6 +5,7 @@ from allure_commons.types import Severity
 from selenium_tests.page_objects.MainPage import MainPage
 from selenium_tests.page_objects.ProductSearchPage import ProductSearchPage
 from ..page_objects.page_elements.ProductCardElement import ProductCardElement
+from ..page_objects.page_elements.OpencartHeaderElement import OpencartHeaderElement
 
 
 @allure.feature("Search Bar")
@@ -19,8 +20,9 @@ def test_search_for_products(browser, search_text):
         main_page.check_main_page_title()
 
     with allure.step("Search for a product"):
-        main_page.input_text_into_search_field(search_text)
-        main_page.click_search_button()
+        header_element = OpencartHeaderElement(browser=browser)
+        header_element.input_text_into_search_field(search_text)
+        header_element.click_search_button()
 
     with allure.step("Check search results"):
         ProductSearchPage(browser=browser).check_search_page_title(search_text)
@@ -44,8 +46,9 @@ def test_search_for_products_invalid_value(browser, search_text):
         main_page.check_main_page_title()
 
     with allure.step("Search for a product"):
-        main_page.input_text_into_search_field(search_text)
-        main_page.click_search_button()
+        header_element = OpencartHeaderElement(browser=browser)
+        header_element.input_text_into_search_field(search_text)
+        header_element.click_search_button()
 
     with allure.step("Check search results"):
         product_search_page = ProductSearchPage(browser=browser)
@@ -69,8 +72,9 @@ def test_search_for_products_empty_value(browser, search_text):
         main_page.check_main_page_title()
 
     with allure.step("Search for a product"):
-        main_page.input_text_into_search_field(search_text)
-        main_page.click_search_button()
+        header_element = OpencartHeaderElement(browser=browser)
+        header_element.input_text_into_search_field(search_text)
+        header_element.click_search_button()
 
     with allure.step("Check search results"):
         product_search_page = ProductSearchPage(browser=browser)
@@ -94,8 +98,9 @@ def test_search_for_products_space_value(browser, search_text):
         main_page.check_main_page_title()
 
     with allure.step("Search for a product"):
-        main_page.input_text_into_search_field(search_text)
-        main_page.click_search_button()
+        header_element = OpencartHeaderElement(browser=browser)
+        header_element.input_text_into_search_field(search_text)
+        header_element.click_search_button()
 
     with allure.step("Check search results"):
         ProductSearchPage(browser=browser).check_search_page_title("Search - ", title_prefix="")
