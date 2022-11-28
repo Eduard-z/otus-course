@@ -6,6 +6,7 @@ class OpencartHeaderElement(BasePage):
     MY_ACCOUNT_DROPDOWN = (By.CSS_SELECTOR, "a[title='My Account']")
     REGISTER_USER_LINK_REL = (By.XPATH, "//following-sibling::ul//a[text()='Register']")
     LOGIN_AS_USER_LINK_REL = (By.XPATH, "//following-sibling::ul//a[text()='Login']")
+    LOGOUT_LINK_REL = (By.XPATH, "//following-sibling::ul//a[text()='Logout']")
     SEARCH_FIELD = (By.NAME, "search")
     SEARCH_BUTTON = (By.CSS_SELECTOR, "#search button")
     CART_BUTTON = (By.CSS_SELECTOR, ".btn-inverse")
@@ -24,6 +25,16 @@ class OpencartHeaderElement(BasePage):
 
     def click_login_into_user_account(self):
         self._click_child_element(self.MY_ACCOUNT_DROPDOWN, self.LOGIN_AS_USER_LINK_REL)
+
+    def is_user_logged_in(self) -> bool:
+        try:
+            self._verify_element_presence(self.LOGOUT_LINK_REL)
+        except AssertionError:
+            return False
+        return True
+
+    def click_logout(self):
+        self._click_child_element(self.MY_ACCOUNT_DROPDOWN, self.LOGOUT_LINK_REL)
 
     def input_text_into_search_field(self, search_text: str):
         self._input_field_value(self.SEARCH_FIELD, search_text)
