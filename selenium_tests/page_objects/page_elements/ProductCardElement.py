@@ -6,6 +6,7 @@ from ..BasePage import BasePage
 class ProductCardElement(BasePage):
     PRODUCT_CARD = (By.CSS_SELECTOR, ".product-thumb")
     PRODUCT_NAME = (By.CSS_SELECTOR, ".caption a")
+    ADD_TO_CART_BUTTON = (By.CSS_SELECTOR, ".button-group button:nth-of-type(1)")
 
     @property
     def all_product_cards_elements(self) -> list[WebElement]:
@@ -26,3 +27,6 @@ class ProductCardElement(BasePage):
                 if word not in name:
                     return False
             return True
+
+    def click_add_to_cart_button(self, card_element: WebElement):
+        self._click_child_element(card_element, self.ADD_TO_CART_BUTTON)

@@ -9,7 +9,8 @@ class OpencartHeaderElement(BasePage):
     LOGOUT_LINK_REL = (By.XPATH, "//following-sibling::ul//a[text()='Logout']")
     SEARCH_FIELD = (By.NAME, "search")
     SEARCH_BUTTON = (By.CSS_SELECTOR, "#search button")
-    CART_BUTTON = (By.CSS_SELECTOR, ".btn-inverse")
+    CART_BUTTON = (By.CSS_SELECTOR, "a[title='Shopping Cart']")
+    CART_DROPDOWN = (By.CSS_SELECTOR, "#cart button")
     OPENCART_LOGO_LINK = (By.CSS_SELECTOR, "[id='logo'] > a")
     CURRENCY_DROPDOWN = (By.XPATH, "//button/span[text()= 'Currency']/ancestor::button")
     CURRENCY_ICON = (By.XPATH, "//button/span[text()= 'Currency']/preceding-sibling::strong")
@@ -44,6 +45,9 @@ class OpencartHeaderElement(BasePage):
 
     def click_cart_button(self):
         self._click(self.CART_BUTTON)
+
+    def expand_cart_dropdown(self):
+        self._click(self.CART_DROPDOWN)
 
     def click_your_store_link(self):
         self._click(self.OPENCART_LOGO_LINK)
