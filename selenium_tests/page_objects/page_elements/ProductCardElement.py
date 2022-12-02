@@ -30,3 +30,6 @@ class ProductCardElement(BasePage):
 
     def click_add_to_cart_button(self, card_element: WebElement):
         self._click_child_element(card_element, self.ADD_TO_CART_BUTTON)
+
+    def click_into_first_product_card(self):
+        self._click(self.PRODUCT_NAME)

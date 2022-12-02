@@ -27,7 +27,7 @@ class BasePage:
         self.logger.addHandler(self.log_file)
         self.logger.setLevel(level=self.browser.log_level)
 
-    def _verify_element_presence(self, locator: tuple):
+    def _verify_element_presence(self, locator: tuple) -> WebElement:
         with allure.step(f'Verify element "{locator}" is present'):
             self.logger.info('Verify element "%s" is present', locator)
 
@@ -111,45 +111,89 @@ class BasePage:
             )
             raise AssertionError(f"Can't find element by locator: {relative_locator}")
 
-    def _click_facebook_like_widget(self, locator: tuple):
-        with allure.step(f'Click "{locator}" facebook Like widget'):
-            self.logger.info('Click "%s" facebook Like widget', locator)
-            dropdown_element = self._verify_element_presence(locator)
+    def _click_social_net_widget(self, iframe_locator: tuple, locator: tuple):
+        with allure.step(f'Click "{locator}" social network share widget'):
+            self.logger.info('Click "%s" social network share widget', locator)
+
+            self._switch_to_iframe(iframe_locator)
+            widget = self._verify_element_presence(locator)
             ActionChains(self.browser).pause(0.3) \
-                .move_to_element(dropdown_element).pause(1).click_and_hold().pause(1).release().perform()
+                .move_to_element(widget).pause(0.9).click_and_hold().pause(0.7).release().perform()
+
+    def _switch_to_iframe(self, iframe_locator: tuple):
+        with allure.step(f'Switch to iFrame "{iframe_locator}"'):
+            self.logger.info('Switch to iFrame "%s"', iframe_locator)
+
+            try:
+                WebDriverWait(driver=self.browser, timeout=3).until(
+                    EC.frame_to_be_available_and_switch_to_it(iframe_locator))
+            except TimeoutException:
+                self.logger.exception("Exception occurred: iFrame '%s' not found", iframe_locator)
+                allure.attach(
+                    body=self.browser.get_screenshot_as_png(),
+                    name="screenshot_iFrame_not_found",
+                    attachment_type=allure.attachment_type.PNG
+                )
+                raise AssertionError(f"Can't find iFrame by locator: {iframe_locator}")
 
     def _switch_out_of_iframe(self):
         with allure.step('Switch out of iframe to default context'):
             self.logger.info('Switch out of iframe to default context')
             self.browser.switch_to.default_content()
 
+    def _verify_iframe_button_colour(self, iframe_locator: tuple, locator: tuple, colour: str):
+        with allure.step(f'Verify "{locator}" button colour inside iframe is {colour}'):
+            self.logger.info('Verify "%s" button colour inside iframe is %s', locator, colour)
+
+            self._switch_to_iframe(iframe_locator)
+            actual_colour = self._verify_element_presence(locator).value_of_css_property("background-color")
+            try:
+                assert actual_colour == colour, f"Expected colour to be '{colour}' but it is '{actual_colour}'"
+                self._switch_out_of_iframe()
+            except AssertionError:
+                self.logger.exception("Exception occurred: button colour is not %s", colour)
+                allure.attach(
+                    body=self.browser.get_screenshot_as_png(),
+                    name="screenshot_wrong_button_colour",
+                    attachment_type=allure.attachment_type.PNG
+                )
+                raise AssertionError(f"Button colour is not {colour}")
+
     def _verify_page_title(self, page_title: str):
         with allure.step(f'Verify Page Title text is "{page_title}"'):
             self.logger.info('Verify Page Title text is "%s"', page_title)
+
             actual_title = self.browser.title
             try:
-                assert actual_title == page_title
-            except AssertionError:
+                WebDriverWait(driver=self.browser, timeout=1).until(EC.title_is(page_title))
+            except TimeoutException:
                 self.logger.exception("Exception occurred: Wrong page title '%s'", actual_title)
-                raise AssertionError(f"Wrong page title '{actual_title}'")
+                raise AssertionError(f"Expected title to be '{page_title}' but it is '{actual_title}'")
 
-    def _get_browser_current_windows(self):
-        main_window = self.browser.current_window_handle
-        current_browser_tabs = self.browser.window_handles
-        return current_browser_tabs
+    def _get_browser_current_window_name(self) -> str:
+        return self.browser.current_window_handle
 
-    def _switch_to_another_browser_tab(self, browser_window_handle):
+    def _get_browser_all_windows(self) -> list:
+        return self.browser.window_handles
+
+    def _get_new_window_name(self, old_windows: list) -> str:
+        """expected there is 1 new window / tab appeared"""
+        old_windows_list = set(old_windows)
+        new_windows_list = self._get_browser_all_windows()
+        [new_window_name] = [i for i in new_windows_list if i not in old_windows_list]
+        return new_window_name
+
+    def _switch_to_another_browser_tab(self, browser_window_handle: str):
         self.browser.switch_to.window(browser_window_handle)
 
-    def _verify_new_window_is_open(self, old_windows):
+    def _verify_new_window_is_open(self, old_windows: list) -> bool:
         with allure.step('Verify new browser tab is opened'):
             self.logger.info('Verify new browser tab is opened')
             try:
-                WebDriverWait(driver=self.browser, timeout=2)\
-                    .until(EC.new_window_is_opened(old_windows))
-                return list(set(self.browser.window_handles).difference(set(old_windows)))[0]
+                return WebDriverWait(driver=self.browser, timeout=4).until(
+                    EC.new_window_is_opened(old_windows))
             except TimeoutException:
-                self.logger.exception("Exception occurred")
+                self.logger.exception("Exception occurred: browser tab not opened")
                 allure.attach(
                     body=self.browser.get_screenshot_as_png(),
                     name="screenshot_browser_tab_not_found",
