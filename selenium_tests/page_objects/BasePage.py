@@ -184,7 +184,10 @@ class BasePage:
         return new_window_name
 
     def _switch_to_another_browser_tab(self, browser_window_handle: str):
-        self.browser.switch_to.window(browser_window_handle)
+        with allure.step(f"Switch to browser tab {browser_window_handle}"):
+            self.logger.info("Switch to browser tab %s", browser_window_handle)
+
+            self.browser.switch_to.window(browser_window_handle)
 
     def _verify_new_window_is_open(self, old_windows: list) -> bool:
         with allure.step('Verify new browser tab is opened'):
@@ -200,3 +203,9 @@ class BasePage:
                     attachment_type=allure.attachment_type.PNG
                 )
                 raise AssertionError("Can't find browser tab")
+
+    def _delete_cookie(self, cookie_name: str):
+        with allure.step(f"Delete cookie '{cookie_name}'"):
+            self.logger.info("Delete cookie '%s'", cookie_name)
+
+            self.browser.delete_cookie(cookie_name)

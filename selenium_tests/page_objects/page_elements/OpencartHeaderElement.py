@@ -37,6 +37,9 @@ class OpencartHeaderElement(BasePage):
     def click_logout(self):
         self._click_child_element(self.MY_ACCOUNT_DROPDOWN, self.LOGOUT_LINK_REL)
 
+    def delete_session_cookie(self):
+        self._delete_cookie("OCSESSID")
+
     def input_text_into_search_field(self, search_text: str):
         self._input_field_value(self.SEARCH_FIELD, search_text)
 

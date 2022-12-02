@@ -15,7 +15,7 @@ from selenium_tests.page_objects.page_elements.OpencartHeaderElement import Open
 @allure.title("Create new user account")
 @pytest.mark.parametrize("user_registration_data",
                          [{"first_name": "first name test1", "last_name": "last name test1",
-                           "email_address": "email@test31.ru", "telephone": "1111111",
+                           "email_address": "email@test33.ru", "telephone": "1111111",
                            "password": "password_test1", "confirm_pass": "password_test1"}
                           ])
 def test_register_new_user(browser, user_registration_data):
@@ -51,15 +51,14 @@ def test_register_new_user(browser, user_registration_data):
 @allure.title("Login with created user account")
 @pytest.mark.parametrize("user_registration_data",
                          [{"first_name": "first name test1", "last_name": "last name test1",
-                           "email_address": "email@test31.ru", "telephone": "1111111",
+                           "email_address": "email@test33.ru", "telephone": "1111111",
                            "password": "password_test1", "confirm_pass": "password_test1"}
                           ])
 def test_login_as_user(browser, user_registration_data):
     with allure.step("Pre-condition: Ensure user is not logged in"):
         header_element = OpencartHeaderElement(browser=browser)
         if header_element.is_user_logged_in():
-            header_element.expand_my_account_dropdown()
-            header_element.click_logout()
+            header_element.delete_session_cookie()
 
     with allure.step("Open Main page"):
         main_page = MainPage(browser=browser)
