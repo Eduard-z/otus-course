@@ -14,7 +14,7 @@ def test_login_as_admin(browser):
         login_page.wait_until_login_form_is_displayed()
 
     with allure.step("Input credentials and log in"):
-        login_page.input_username("user")
-        login_page.input_password("bitnami")
+        login_page.input_username()
+        login_page.input_password()
         login_page.click_login_button()
         AdminPage(browser=browser).check_admin_page_title()

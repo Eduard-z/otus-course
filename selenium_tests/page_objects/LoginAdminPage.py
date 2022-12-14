@@ -1,3 +1,6 @@
+import os
+
+from dotenv import load_dotenv
 from selenium.webdriver.common.by import By
 from .BasePage import BasePage
 
@@ -12,6 +15,7 @@ class LoginAdminPage(BasePage):
 
     path = "/admin"
     page_title = "Administration"
+    load_dotenv()
 
     def open_login_page(self):
         self.browser.get(url=self.browser.url + self.path)
@@ -22,10 +26,10 @@ class LoginAdminPage(BasePage):
     def wait_until_login_form_is_displayed(self):
         self._verify_element_presence(self.LOGIN_FORM)
 
-    def input_username(self, admin_name: str):
+    def input_username(self, admin_name: str = os.getenv("OPENCART_ADMIN_USERNAME")):
         self._input_field_value(self.USERNAME_FIELD, admin_name)
 
-    def input_password(self, admin_password: str):
+    def input_password(self, admin_password: str = os.getenv("OPENCART_ADMIN_PASSWORD")):
         self._input_field_value(self.PASSWORD_FIELD, admin_password)
 
     def click_login_button(self):
