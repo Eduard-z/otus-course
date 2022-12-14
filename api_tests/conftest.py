@@ -1,6 +1,7 @@
-import requests
 import pytest
 import os
+import api_tests.api as api
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -15,24 +16,13 @@ def base_url(request):
     return request.config.getoption("--url")
 
 
-@pytest.fixture()
-def establish_session(base_url):
-    target = base_url + "/index.php?route=api/login"
-    s = requests.Session()
-    response = s.post(url=target, data={'username': os.getenv("OPENCART_API_USERNAME"),
-                                        'key': os.getenv("OPENCART_API_KEY")})
-    return response
-
-
-if __name__ == '__main__':
-    res = establish_session()
-
-    print("\n", res.status_code)
-    print("\n", res.reason)
-    print("\n", res.url)
-    print("\n", res.headers)
-    print("\n", res.json())
-    print("\n", res.text)
-    print("\n", res.cookies.keys())
-    print("\n", res.request.headers)
-    print("\n", res.request.body)
+@pytest.fixture
+def session_token(base_url: str) -> str:
+    session = api.establish_session()
+    response = api.custom_request(request_method="POST",
+                                  base_url=base_url, endpoint="/index.php?route=api/login",
+                                  session=session,
+                                  data={'username': os.getenv("OPENCART_API_USERNAME"),
+                                        'key': os.getenv("OPENCART_API_KEY")}
+                                  )
+    return response.json()["api_token"]
