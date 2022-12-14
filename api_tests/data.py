@@ -34,7 +34,7 @@ messages = SimpleNamespace(
 )
 
 
-def fake_data() -> dict:
+def generate_registration_data() -> dict:
     fake = Faker()
 
     first_name = fake.first_name()
@@ -44,3 +44,6 @@ def fake_data() -> dict:
     password = fake.password()
     return {"first_name": first_name, "last_name": last_name, "email_address": email_address,
             "telephone": telephone, "password": password, "confirm_pass": password}
+
+
+fake_data = generate_registration_data()

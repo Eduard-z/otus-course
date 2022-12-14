@@ -7,17 +7,13 @@ from selenium_tests.page_objects.RegistrationPage import RegistrationPage
 from selenium_tests.page_objects.UserAccountCreatedPage import UserAccountCreatedPage
 from selenium_tests.page_objects.UserAccountPage import UserAccountPage
 from selenium_tests.page_objects.page_elements.OpencartHeaderElement import OpencartHeaderElement
+from api_tests.data import fake_data
 
 
-# @pytest.mark.skip(reason="existing email_address")
 @allure.feature("Register new user")
 @allure.story("Create new user account")
 @allure.title("Create new user account")
-@pytest.mark.parametrize("user_registration_data",
-                         [{"first_name": "first name test1", "last_name": "last name test1",
-                           "email_address": "email@test33.ru", "telephone": "1111111",
-                           "password": "password_test1", "confirm_pass": "password_test1"}
-                          ])
+@pytest.mark.parametrize("user_registration_data", [fake_data])
 def test_register_new_user(browser, user_registration_data):
     with allure.step("Open Main page"):
         main_page = MainPage(browser=browser)
@@ -49,11 +45,7 @@ def test_register_new_user(browser, user_registration_data):
 @allure.feature("Register new user")
 @allure.story("Create new user account")
 @allure.title("Login with created user account")
-@pytest.mark.parametrize("user_registration_data",
-                         [{"first_name": "first name test1", "last_name": "last name test1",
-                           "email_address": "email@test33.ru", "telephone": "1111111",
-                           "password": "password_test1", "confirm_pass": "password_test1"}
-                          ])
+@pytest.mark.parametrize("user_registration_data", [fake_data])
 def test_login_as_user(browser, user_registration_data):
     with allure.step("Pre-condition: Ensure user is not logged in"):
         header_element = OpencartHeaderElement(browser=browser)
