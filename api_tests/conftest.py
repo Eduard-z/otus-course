@@ -1,12 +1,22 @@
 import requests
+import pytest
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
-base_url = "http://192.168.100.9:8081"
 
 
-def establish_session():
+def pytest_addoption(parser):
+    parser.addoption("--url", default="http://192.168.100.9:8081", help="Base Url for Opencart")
+
+
+@pytest.fixture
+def base_url(request):
+    return request.config.getoption("--url")
+
+
+@pytest.fixture()
+def establish_session(base_url):
     target = base_url + "/index.php?route=api/login"
     s = requests.Session()
     response = s.post(url=target, data={'username': os.getenv("OPENCART_API_USERNAME"),
