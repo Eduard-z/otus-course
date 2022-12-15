@@ -1,5 +1,5 @@
 # Example of test framework for Opencart app
-####pytest --url=http://ip_address -vs test_name
+pytest --url=http://ip_address -vs test_name
 
 # otus-course
 Домашнее задание выполнено для курса Python QA Engineer
